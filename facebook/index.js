@@ -8,6 +8,6 @@ var lib = require('../lib');
 // scope:public_profile
 // client_id:723043064496993
 router.get('/v2.2/dialog/oauth',lib.authorizationGrantDirect);
-
+router.get('/v2.2/oauth/access_token', lib.issueToken);
 
 module.exports = router;
