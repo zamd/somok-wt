@@ -10,4 +10,11 @@ var lib = require('../lib');
 router.get('/v2.2/dialog/oauth',lib.authorizationGrantDirect);
 router.get('/v2.2/oauth/access_token', lib.issueToken);
 
+
+router.get('/dialog/oauth',lib.authorizationGrantDirect);
+router.post('/oauth/access_token', function(req,res,next){
+	console.log('issuing...');
+	next();
+}, lib.token);
+
 module.exports = router;
