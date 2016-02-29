@@ -1,14 +1,16 @@
 
 var app = require('express')(),
 	session = require('express-session'),
-	bodyParser = require('body-parser');
-	
+	auth = require('./auth'),
+	bodyParser = require('body-parser'),
+	debug = require('debug')('somok');
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(session({secret: '3232322'}));
 
 app.use('/', require('./facebook'));
 
-app.listen(5000, function(){
-	console.log('started');
+var server = app.listen(1443, function(){
+	debug('started...');
 });

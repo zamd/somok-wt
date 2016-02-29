@@ -1,5 +1,9 @@
-var router = require('express').Router();
-var lib = require('../lib');
+var router = require('express').Router(),
+	lib = require('../lib'),
+	passport = require('passport'),
+	profile = require('./profile');
+
+router.use(passport.initialize());
 
 // state:FMKl70PZsXn2r9GK
 // prompt:consent
@@ -8,13 +12,12 @@ var lib = require('../lib');
 // scope:public_profile
 // client_id:723043064496993
 router.get('/v2.2/dialog/oauth',lib.authorizationGrantDirect);
-router.get('/v2.2/oauth/access_token', lib.issueToken);
-
-
 router.get('/dialog/oauth',lib.authorizationGrantDirect);
-router.post('/oauth/access_token', function(req,res,next){
-	console.log('issuing...');
-	next();
-}, lib.token);
+
+router.get('/v2.2/oauth/access_token', lib.issueToken);
+router.post('/oauth/access_token', lib.token);
+
+router.get('/v2.0/me', profile.serve);
+router.get('/v2.5/me', profile.serve);
 
 module.exports = router;
