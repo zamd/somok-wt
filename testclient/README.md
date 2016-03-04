@@ -12,5 +12,8 @@ redirect_uri:"http://requestb.in/ouginjou",
 `nginx.conf` applied by `setup.sh` already has binding for this test-client
 
 `nave use stable`
+
 `npm install`
+
 `node index.js`
+
