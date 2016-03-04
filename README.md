@@ -1,5 +1,10 @@
 # social auth mock
 
+`somok` is created to load test Auth0 social connection by mocking various social providers (intially facebook only). 
+It's a basic OAuth2 authorization server built on top of oauth2rize framework and uses loki.js as the inmemory database to store users and OAuth2 transaction state.
+
+##Setup instructions
+
 
 `git clone https://github.com/zamd/somok.git`
 
