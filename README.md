@@ -19,6 +19,10 @@ To see debugging output use following:
 
 The mock facebook authorization server should be running and fronted by nginx 
 
+On all appliance nodes add the root certificate in `trusted roots`
+
+Edit the `/etc/hosts` and map `facebook.com/graph.facebook.com` to this mock authorization server. 
+
 Set up subscription in `loadImpact.com`. 
 
 Copy `/loadimpact/loadscript.lua` to a loadimpact scenario to run the load test
