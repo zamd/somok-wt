@@ -8,7 +8,7 @@ module.exports.generate = function(users, profiles){
 		var lname = faker.name.lastName();
 
 		var user = {
-			id: faker.random.uuid()+"|fb",
+			id: faker.random.uuid(),
 			username: faker.internet.email(), 
 			password: faker.internet.password()
 		};
@@ -23,7 +23,6 @@ module.exports.generate = function(users, profiles){
 			email: user.username, 
 			link: faker.internet.url()
 		};
-
 
 		users.insert(user);
 		profiles.insert(profile);
