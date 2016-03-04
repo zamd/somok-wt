@@ -4,29 +4,40 @@ var express = require('express'),
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
-//https://satpara.showtps.com/authorize?client_id=t5IZiqpHLIrvwMzhB0VD86BneJ1rVA9K&response_type=code&connection=facebook&prompt=consent&redirect_uri=http://requestb.in/ouginjou
-
 var counter = 0;
 
 app.get('/',function(req,res){
+	//console.log(`processing token:     ${req.query.code}`);
 	request({
-		uri: "https://satpara.showtps.com/oauth/token", 
+		uri: "https://satpara.showtps.com/oauth/token",
 		method: "POST",
 		json: {
 			code: req.query.code,
-			client_id:"t5IZiqpHLIrvwMzhB0VD86BneJ1rVA9K",
-			client_secret:"",
-			redirect_uri:"http://requestb.in/ouginjou",
+			client_id:"tPKsiils4Lk5osvIe6Xbi78CFaAe5cbH",
+			client_secret:"nvymD4ll1e28VmZ95J0iAoDbDhZRf6P8it4bXGL_4WQT_KJwizSd7ojjoPid7GV5",
+			redirect_uri:"http://zamd.southeastasia.cloudapp.azure.com",
 			grant_type: "authorization_code"
 		}
-	},function(err,response,body){
+	},function(err,response,body) {
 		if (!err){
-			counter++;
-			res.json(body);
+			request(
+			{
+				uri: 'https://satpara.showtps.com/userinfo',
+				headers: {
+					"Authorization": `Bearer ${body.access_token}`
+				}
+			}, function(err,resp, profile){
+				if (!err)
+					res.json(JSON.parse(profile));
+				else{
+					res.end(err);
+				}
+			});
 		}
-		res.end(err);
+		else {
+			res.end(err);
+		}
 	});
-
 });
 
 app.get('/counter',function(req,res){
@@ -39,7 +50,7 @@ app.post('/counter/reset',function(req,res){
 });
 
 
-app.listen(5000,function(){
+app.listen(8000,function(){
 	console.log('started....');
 });
 
