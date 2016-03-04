@@ -3,8 +3,8 @@ http.set_option("auto_cookie_handling", true)
 -- auth0
 util.dns_remap("satpara.showtps.com:443", "137.135.46.81")
 --mock facebook
-util.dns_remap("facebook.com:443", "13.76.47.151")
-util.dns_remap("graph.facebook.com:443", "13.76.47.151")
+util.dns_remap("facebook.com:443", "104.42.127.98")
+util.dns_remap("graph.facebook.com:443", "104.42.127.98")
 
 local url = "https://satpara.showtps.com/authorize"..
 			"?client_id=tPKsiils4Lk5osvIe6Xbi78CFaAe5cbH"..
