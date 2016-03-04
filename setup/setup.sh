@@ -6,7 +6,7 @@ if [ ! -d $ssl_dir ]; then
 	mkdir $ssl_dir
 fi 
 
-cp -a ./certs/ $ssl_dir/.
+cp -a ./certs/. $ssl_dir/.
 
 mv $nginx $nginx_back
 
