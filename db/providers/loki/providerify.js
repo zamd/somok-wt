@@ -1,6 +1,6 @@
 
 function Provider (collection,trim){
-	
+
 	function findOne(filter,cb){
 		var doc = collection.findOne(filter);
 		if (trim){
@@ -23,7 +23,7 @@ function Provider (collection,trim){
 
 	function _get(id, cb){
 		var doc = collection.get(id);
-		cb(null, trim(doc));
+		cb(null, doc);
 	}
 
 	function _import(docs, cb){
