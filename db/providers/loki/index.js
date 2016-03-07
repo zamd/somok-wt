@@ -11,7 +11,7 @@ grants.ensureIndex("token");
 profiles.ensureIndex("username");
 
 module.exports.users = new Provider(users);
-module.exports.profiles = new Provider(profiles);
+module.exports.profiles = new Provider(profiles, true);
 module.exports.grants = new Provider(grants);
 
 

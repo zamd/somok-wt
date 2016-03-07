@@ -1,30 +1,28 @@
 
-function Provider (collection){
-
-	function trim(doc){
-		delete doc.meta;
-		delete doc.$loki
-		return doc;
-	}
-
+function Provider (collection,trim){
+	
 	function findOne(filter,cb){
 		var doc = collection.findOne(filter);
-		cb(null, trim(doc));
+		if (trim){
+			delete doc.meta;
+			delete doc.$loki
+		}
+
+		cb(null, doc);
 	}
 
 	function insert(doc, cb){
 		var inserted = collection.insert(doc);
-		cb(null, trim(inserted));
+		cb(null, inserted);
 	}
 
 	function update(doc, cb){
 		var updated = collection.update(doc);
-		cb(null, trim(updated));
+		cb(null, updated);
 	}
 
 	function _get(id, cb){
 		var doc = collection.get(id);
-
 		cb(null, trim(doc));
 	}
 
