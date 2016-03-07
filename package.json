@@ -9,6 +9,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "async": "^1.5.2",
     "body-parser": "^1.15.0",
     "debug": "^2.2.0",
     "dotenv": "^2.0.0",
@@ -21,6 +22,7 @@
     "passport-custom": "^1.0.5",
     "passport-http": "^0.3.0",
     "passport-http-bearer": "^1.0.1",
-    "passport-oauth2-client-password": "^0.1.2"
+    "passport-oauth2-client-password": "^0.1.2",
+    "redis": "^2.4.2"
   }
 }
