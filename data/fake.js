@@ -1,9 +1,10 @@
 var faker = require('faker');
 
-const MaxUsers = 1000;
+module.exports.generate = function(max){
+	var profiles = [],
+		users 	 = [];
 
-module.exports.generate = function(users, profiles){
-	for(var i=0;i<MaxUsers;i++){
+	for(var i=0;i<max;i++){
 		var fname = faker.name.firstName();
 		var lname = faker.name.lastName();
 
@@ -24,7 +25,8 @@ module.exports.generate = function(users, profiles){
 			link: faker.internet.url()
 		};
 
-		users.insert(user);
-		profiles.insert(profile);
+		users.push(user);
+		profiles.push(profile);
 	}
+	return {users, profiles};
 }

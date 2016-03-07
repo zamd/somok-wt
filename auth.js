@@ -9,16 +9,23 @@ var passport = require('passport'),
 	random = require('./utils').random;
 
 passport.use(new BearerStartegy(function(token, cb){
-	const grant = db.grants.findOne({token: token});
-	cb(null, grant.user);
+	db.grants.findOne({token: token}, function(err, grant) {
+		if (err)
+			return cb(err,null)
+		cb(null, grant.user);	
+	});
 }));
 
 passport.use("autoAuth", new CustomStrategy(function(req,done){
 	var id = random(1,1000);
 	debug(`authenticating: getting user:id "${id}"...`);
 	
-	var user = db.users.get(id);
-	done(null,{username: user.username, id: user.id});
+	db.users.get(id, function(err,user) {
+		if (err)
+			return cb(err,null);
+		done(null,{username: user.username, id: user.id});
+	});
+
 }));
 
 
