@@ -9,6 +9,7 @@ const grants = db.addCollection('grants');
 
 grants.ensureIndex("code");
 grants.ensureIndex("token");
+profiles.ensureIndex("username");
 
 data.generate(users, profiles);
 
