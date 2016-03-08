@@ -1,5 +1,5 @@
 module.exports = {
-	url:  process.env.REDIS_URL,
+	host:  process.env.REDIS_HOST,
 	port: process.env.REDIS_PORT || 6379,
-	authKey: process.env.REDIS_AUTH_KEY
+	auth_pass: process.env.REDIS_AUTH_KEY
 }
