@@ -14,8 +14,8 @@ var express = require('express'),
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
 var counter = 0;
-
-var client = redis.createClient(options);
+if (process.env.CLUSTER_MODE)
+	var client = redis.createClient(options);
 var profileKey = 'profile.count';
 
 function increment(done){
