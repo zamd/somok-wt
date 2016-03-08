@@ -1,13 +1,57 @@
+
+require('dotenv').config();
+
 var express = require('express'),
 	request = require('request'),
+	cluster = require('cluster'),
+	options = require('./options'),
+	redis = require('redis'),
+	debug = require('debug')('profile')
 	app = express();
+
+
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
 var counter = 0;
 
+var client = redis.createClient(options);
+var profileKey = 'profile.count';
+
+function increment(done){
+	if (!process.env.CLUSTER_MODE)
+		return counter++;
+
+	client.incr(profileKey, function(err, v){
+		done(parseInt(v));
+	});
+}
+
+function getCounter(done){
+	if (!process.env.CLUSTER_MODE)
+		return done(counter);
+	client.incrby(profileKey,0, function(_,v){
+		done(parseInt(v));
+	});
+}
+
+function resetCounter(done){
+	if (!process.env.CLUSTER_MODE){
+		counter = 0;
+		return done(counter);
+	}
+
+	client.del(profileKey, done);
+}
+
+
+
 app.get('/',function(req,res){
-	//console.log(`processing token:     ${req.query.code}`);
+	increment(v=>{});
+	if (process.env.NO_PROFILE)
+		return getCounter(v=> res.json({counter: v}));
+
+	debug(`processing code:  ${req.query.code}`);
 	request({
 		uri: "https://satpara.showtps.com/oauth/token",
 		method: "POST",
@@ -41,16 +85,37 @@ app.get('/',function(req,res){
 });
 
 app.get('/counter',function(req,res){
-	res.status(200).send(`counter =${counter}`);
+	getCounter(v=>res.json({counter: v}));
 });
 
 app.post('/counter/reset',function(req,res){
-	counter=0;
-	res.redirect('/counter');
+	resetCounter(function(){
+		res.redirect('/counter');
+	});
 });
 
+function startServer(){
+	debug(`starting server...`);
+	app.listen(8000,function(){
+		debug(`started...`);
+	});
+}
 
-app.listen(8000,function(){
-	console.log('started....');
-});
+
+if (cluster.isMaster && process.env.CLUSTER_MODE) {
+	debug(`staring in clustered mode...`);
+	var workerCount = require('os').cpus().length;
+	for (var i = 0; i < workerCount; i++) {
+		cluster.fork();
+	}
+}
+else {
+	startServer(); 
+}
+
+
+
+
+
+
 
