@@ -1,8 +1,11 @@
-var client = require('./client'),
-	async  = require('async');
+var redis = require('redis'),
+	async  = require('async'),
+	options = require('./options');
+
 
 
 function Profiles(){
+	var client = redis.createClient(options);
 
 	function key(username){
 		return `profile.${username}`;

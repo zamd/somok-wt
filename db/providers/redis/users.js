@@ -1,13 +1,15 @@
-var client = require('./client'),
-	async  = require('async');
+var redis = require('redis'),
+	async  = require('async'),
+	options = require('./options');
+
 
 const UserIndexKey = "user.n";
 const UserKey = "user.";
 
-// overwrite user data by always starting from userId=1
-client.del(UserIndexKey);
-
 function Users(){
+	var client = redis.createClient(options);
+	client.del(UserIndexKey); // overwrite user data by always starting from userId=1
+
 	function insert(user, done){
 		client.incr(UserIndexKey, function(err, id){
 			var userId = UserKey+id;

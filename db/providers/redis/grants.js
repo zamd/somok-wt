@@ -1,6 +1,10 @@
-var client = require('./client');
+var redis = require('redis'),
+	options = require('./options');
+
+
 
 function Grants(){
+	var client = redis.createClient(options);
 
 	function key(suffix){
 		return `grant.${suffix}`;
@@ -46,29 +50,38 @@ function Grants(){
 		}
 	}
 
-	function insert(grant, done) {
-		var grantKey = key(grant.code);
-		var user = grant.user; delete grant.user;
-		var	grantClient = grant.client; delete grant.client;
+	function update(grant, done) {
+		var grantHash = {
+			code: grant.code,
+			redirectURI: grant.redirectURI
+		};
+		var userHash = grant.user;
+		var clientHash = grant.client;
 
-		client.multi()
-		.set(key(grant.token), grantKey) // store foreign key...
-		.hmset(grantKey,grant)
-		.hmset(userKey(grantKey), user)
-		.hmset(clientKey(grantKey),grantClient)
+		var grantKey = key(grantHash.code);
+
+		var batch = client.multi();
+		batch.
+		hmset(grantKey,grantHash).
+		hmset(userKey(grantKey), userHash).
+		hmset(clientKey(grantKey),clientHash);
+
+		if (grant.token){
+			batch.hset(grantKey, 'token',grant.token);
+			batch.set(key(grant.token), grantKey); // store foreign key...
+		}
+		batch
 		.exec(function(err, replies){
 			if (err)
 				return done(err, null);
-			
-			grant.user = user;
-			grant.client = grantClient;
+
 			done(null, grant);
 		})
 	}
 
 	return {
-		update: insert,
-		insert,
+		update,
+		insert: update,
 		findOne
 	}
 }
