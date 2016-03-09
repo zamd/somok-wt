@@ -15,7 +15,9 @@ process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
 var counter = 0;
 
-var client = redis.createClient(options);
+if (process.env.CLUSTER_MODE)
+	var client = redis.createClient(options);
+
 var profileKey = 'profile.count';
 
 function increment(done){
@@ -47,9 +49,8 @@ function resetCounter(done){
 
 
 app.get('/',function(req,res){
-	increment(v=>{});
 	if (process.env.NO_PROFILE)
-		return getCounter(v=> res.json({counter: v}));
+		return increment(v=> res.json({counter: v}));
 
 	debug(`processing code:  ${req.query.code}`);
 	request({
@@ -72,7 +73,16 @@ app.get('/',function(req,res){
 				}
 			}, function(err,resp, profile){
 				if (!err)
-					res.json(JSON.parse(profile));
+				{	var json;
+					try{
+						json = JSON.parse(profile);
+					}
+					catch(e){
+						json = {parseError: e}
+					}
+					increment(v=>{});
+					res.json(json);
+				}
 				else{
 					res.end(err);
 				}
