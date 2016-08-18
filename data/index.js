@@ -1,4 +1,5 @@
 const fake = require('./fake'),
+	  debug = require('debug')('somok'),
 	  db = require('../db');
 
 module.exports.setup = function(done){
@@ -14,4 +15,5 @@ module.exports.setup = function(done){
 			done(`partial import error`);
 		});
 	});
+	data = null;
 }

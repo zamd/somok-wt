@@ -5,6 +5,8 @@ var redis = require('redis'),
 
 
 function Profiles(){
+	if (!!process.env.CLUSTER_MODE)
+		return;
 	var client = redis.createClient(options);
 
 	function key(username){

@@ -4,6 +4,8 @@ var redis = require('redis'),
 
 
 function Grants(){
+	if (!!process.env.CLUSTER_MODE)
+		return;
 	var client = redis.createClient(options);
 
 	function key(suffix){
