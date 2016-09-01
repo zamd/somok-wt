@@ -13,7 +13,8 @@ module.exports.setup = function(done){
 				data.profiles.length===pc)
 				return done();
 			done(`partial import error`);
+
+			data = null;
 		});
 	});
-	data = null;
 }
