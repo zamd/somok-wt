@@ -33,7 +33,7 @@ if (cluster.isMaster) {
 			console.log(err);
 			return;
 		}
-		if (process.env.CLUSTER_MODE){
+		if (process.env.CLUSTER_MODE.toLowerCase()=='true'){
 			var workerCount = require('os').cpus().length;
 			debug(`forking ${workerCount} workers...`);
 			for (var i = 0; i < workerCount; i++) {

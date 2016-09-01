@@ -7,7 +7,7 @@ const UserIndexKey = "user.n";
 const UserKey = "user.";
 
 function Users(){
-	if (!!process.env.CLUSTER_MODE)
+	if (process.env.CLUSTER_MODE.toLowerCase()!='true')
 		return;
 	var client = redis.createClient(options);
 	client.del(UserIndexKey); // overwrite user data by always starting from userId=1
