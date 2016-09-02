@@ -1,12 +1,11 @@
-const redis = require('./redis'),
-	 debug = require('debug')('somok');
-	  loki  = require('./loki');
-
+const debug = require('debug')('somok'),
+	nconf = require('nconf');
+	  
 module.exports.active = function(){
-	if (process.env.CLUSTER_MODE.toLowerCase()=='true'){
+	if (nconf.get("CLUSTER_MODE").toLowerCase()=='true'){
 		debug(`Active Provider: Redis`);
-		return redis;
+		return require('./redis');
 	}
 	debug(`Active Provider: Inproc(loki)`);
-	return loki;
+	return require('./loki');
 }

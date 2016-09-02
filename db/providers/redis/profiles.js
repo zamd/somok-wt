@@ -1,11 +1,12 @@
 var redis = require('redis'),
 	async  = require('async'),
-	options = require('./options');
+	options = require('./options'),
+	nconf = require('nconf');
 
 
 
 function Profiles(){
-	if (process.env.CLUSTER_MODE.toLowerCase()!='true')
+	if (nconf.get("CLUSTER_MODE").toLowerCase()!='true')
 		return;
 	var client = redis.createClient(options);
 

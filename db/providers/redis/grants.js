@@ -1,10 +1,11 @@
 var redis = require('redis'),
+	nconf = require('nconf'),
 	options = require('./options');
 
 
 
 function Grants(){
-	if (process.env.CLUSTER_MODE.toLowerCase()!='true')
+	if (nconf.get("CLUSTER_MODE").toLowerCase()!='true')
 		return;
 	var client = redis.createClient(options);
 

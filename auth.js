@@ -1,11 +1,11 @@
 var passport = require('passport'),
-	CustomStrategy = require('passport-custom');
+	CustomStrategy = require('passport-custom'),
 	BearerStartegy = require('passport-http-bearer'),
 	BasicStrategy = require('passport-http').BasicStrategy,
-	ClientPasswordStrategy = require('passport-oauth2-client-password').Strategy
-	util = require('util'),
+	ClientPasswordStrategy = require('passport-oauth2-client-password').Strategy,
 	debug = require('debug')('somok'),
 	db = require('./db'),
+	nconf = require('nconf'),
 	random = require('./utils').random;
 
 passport.use(new BearerStartegy(function(token, cb){
@@ -17,8 +17,8 @@ passport.use(new BearerStartegy(function(token, cb){
 }));
 
 passport.use("autoAuth", new CustomStrategy(function(req,done){
-	var id = random(1,process.env.MAX_USERS);
-	debug(`authenticating: getting user:id "${id}"...`);
+	var id = random(1, parseInt(nconf.get("MAX_USERS")));
+	console.log(`authenticating: getting user:id "${id}"...`);
 	
 	db.users.get(id, function(err,user) {
 		if (err)

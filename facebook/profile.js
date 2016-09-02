@@ -5,11 +5,11 @@ var db = require('../db'),
 module.exports.serve = [
 	passport.authenticate('bearer',{session: false}),
 	function(req,res,next){
-		debug(`profile requested for ${req.user.username}`);
+		console.log(`profile requested for ${req.user.username}`);
 		db.profiles.findOne({username: req.user.username}, function(err, profile){
 			if (err)
 				return res.status(500).send(err);
-			debug(`returning profile for ${profile.username}`);
+			console.log(`returning profile for ${profile.username}`);
 			res.json(profile);	
 		});
 	}

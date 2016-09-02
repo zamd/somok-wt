@@ -1,5 +1,6 @@
 var redis = require('redis'),
 	async  = require('async'),
+	nconf = require('nconf'),
 	options = require('./options');
 
 
@@ -7,7 +8,7 @@ const UserIndexKey = "user.n";
 const UserKey = "user.";
 
 function Users(){
-	if (process.env.CLUSTER_MODE.toLowerCase()!='true')
+	if (nconf.get("CLUSTER_MODE").toLowerCase()!='true')
 		return;
 	var client = redis.createClient(options);
 	client.del(UserIndexKey); // overwrite user data by always starting from userId=1

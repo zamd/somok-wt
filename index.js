@@ -1,54 +1,27 @@
-require('dotenv').config();
 
 var app = require('express')(),
-	cluster = require('cluster'),
 	session = require('express-session'),
-	data = require('./data'),
 	auth = require('./auth'),
 	bodyParser = require('body-parser'),
 	debug = require('debug')('somok');
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(session({
-	secret: '3232322',
-	resave: true,
-	saveUninitialized: false
-}));
-
-app.use('/', require('./facebook'));
-
-function startServer(){
-	debug('starting server...');
-	var port = process.env.PORT || 1443;
-	app.listen(port, function(){
-		debug(`started on ${port}`);
+module.exports = (storageContext) => {
+	app.use((req,res,next)=>{
+		console.log('RUNNING request....');
+		next();
 	});
-}
+	app.use(bodyParser.json());
+	app.use(bodyParser.urlencoded({ extended: true }));
+	app.use(session({
+		secret: '3232322',
+		resave: true,
+		saveUninitialized: false
+	}));
 
-if (cluster.isMaster) {
-	debug('setting up seed data...');
-	data.setup(function(err){
-		if (err){
-			console.log(err);
-			return;
-		}
-		if (process.env.CLUSTER_MODE.toLowerCase()=='true'){
-			var workerCount = require('os').cpus().length;
-			debug(`forking ${workerCount} workers...`);
-			for (var i = 0; i < workerCount; i++) {
-				cluster.fork();
-			}
-		}
-		else{
-			startServer();	
-		}
-	});
+	app.use('/', require('./facebook'));
+	return app;
+	
 }
-else{ 
-	startServer();	
-}
-
 
 /*
 
