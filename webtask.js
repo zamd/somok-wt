@@ -30,8 +30,6 @@ const getServer = (req, res) => {
       });
 
 
-
-
     // Start the server.
     server = require('./index')(req.webtaskContext.storage);
   }
