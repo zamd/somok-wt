@@ -1,2 +1,2 @@
 # somok-wt
-Somok web task 
+[Somok](https://github.com/zamd/somok) as web task 
